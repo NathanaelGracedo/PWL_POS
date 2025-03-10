@@ -19,11 +19,13 @@ Route::group(['prefix' => 'user'], function() {
     Route::delete('/{id}', [UserController::class, 'destroy']);
 });
 
-// Route::get('/level', [LevelController::class, 'index']);
-// Route::get('/kategori', [KategoriController::class, 'index']);
-// Route::get('/user', [UserController::class, 'index']);
-// Route::get('/user/tambah', [UserController::class, 'tambah']);
-// Route::post('/user/tambah_simpan', [UserController::class, 'tambah_simpan']);
-// Route::get('/user/ubah/{id}', [UserController::class, 'ubah']);
-// Route::put('/user/ubah_simpan/{id}', [UserController::class, 'ubah_simpan']) ->name('user.ubah_simpan');
-// Route::get('/user/hapus/{id}', [UserController::class, 'hapus']);
+Route::group(['prefix' => 'level'], function() {
+    Route::get('/', [LevelController::class, 'index']);
+    Route::post('/list', [LevelController::class, 'list']);
+    Route::get('/create', [LevelController::class, 'create']);
+    Route::post('/', [LevelController::class, 'store']);
+    Route::get('/{id}', [LevelController::class, 'show']);
+    Route::get('/{id}/edit', [LevelController::class, 'edit']); 
+    Route::put('/{id}', [LevelController::class, 'update']);
+    Route::delete('/{id}', [LevelController::class, 'destroy']);
+});
