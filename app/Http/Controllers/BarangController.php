@@ -143,6 +143,12 @@ class BarangController extends Controller
         return view('barang.show', ['breadcrumb' => $breadcrumb, 'page' => $page, 'barang' => $barang, 'activeMenu' => $activeMenu]);
     }
 
+    public function show_ajax(string $id) {
+        $barang = BarangModel::find($id);
+
+        return view('barang.show_ajax', ['barang' => $barang]);
+    }
+
     public function edit(string $id) {
         $barang = BarangModel::find($id);
         $kategori = KategoriModel::all();
