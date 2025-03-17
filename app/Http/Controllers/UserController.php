@@ -127,7 +127,7 @@ class UserController extends Controller
         $user = UserModel::with('level')->find($id);
 
         $breadcrumb = (object) [
-            'title' => 'Detail Usesr',
+            'title' => 'Detail User',
             'list'  => ['Home', 'User', 'Detail']
         ];
 
@@ -182,7 +182,7 @@ class UserController extends Controller
             'level_id'  => $request->level_id
         ]);
 
-        return redirect('/user')->with('succes', 'Data user berhasil diubah');
+        return redirect('/user')->with('success', 'Data user berhasil diubah');
     }
 
     public function update_ajax(Request $request, $id) {
@@ -238,5 +238,32 @@ class UserController extends Controller
         } catch (\Illuminate\Database\QueryException $e) {
             return redirect('/user')->with('error', 'Data user gagal dihapus karena masih terdapat tabel lain yang terkait dengan data ini');
         }
+    }
+
+    public function confirm_ajax(string $id) {
+        $user = UserModel::find($id);
+
+        return view('user.confirm_ajax', ['user' => $user]);
+    }
+
+    public function delete_ajax(Request $request, $id)
+    {
+        // cek apakah request dari ajax
+        if ($request->ajax() || $request->wantsJson()) {
+            $user = UserModel::find($id);
+            if ($user) {
+                $user->delete();
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Data berhasil dihapus'
+                ]);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Data tidak ditemukan'
+                ]);
+            }
+        }
+        return redirect('/');
     }
 }
