@@ -20,6 +20,7 @@ Route::middleware(['auth'])->group(function() {
 Route::get('/', [WelcomeController::class, 'index']);
 
 Route::group(['prefix' => 'user'], function() {
+Route::middleware(['authorize:ADM'])->group(function() {
     Route::get('/', [UserController::class, 'index']);
     Route::post('/list', [UserController::class, 'list']);
     Route::get('/create', [UserController::class, 'create']);
@@ -35,6 +36,7 @@ Route::group(['prefix' => 'user'], function() {
     Route::get('/{id}/delete_ajax', [UserController::class, 'confirm_ajax']);
     Route::delete('/{id}/delete_ajax', [UserController::class, 'delete_ajax']);   
     Route::delete('/{id}', [UserController::class, 'destroy']);
+});
 });
 
 Route::group(['prefix' => 'level'], function() {
@@ -58,6 +60,7 @@ Route::middleware(['authorize:ADM'])->group(function() {
 });
 
 Route::group(['prefix' => 'kategori'], function() {
+Route::middleware(['authorize:ADM,MNG'])->group(function() {
     Route::get('/', [KategoriController::class, 'index']);
     Route::post('/list', [KategoriController::class, 'list']);
     Route::get('/create', [KategoriController::class, 'create']);
@@ -74,8 +77,10 @@ Route::group(['prefix' => 'kategori'], function() {
     Route::delete('/{id}/delete_ajax', [KategoriController::class, 'delete_ajax']);   
     Route::delete('/{id}', [KategoriController::class, 'destroy']);
 });
+});
 
 Route::group(['prefix' => 'supplier'], function() {
+    Route::middleware(['authorize:ADM,MNG'])->group(function() {
     Route::get('/', [SupplierController::class, 'index']);
     Route::post('/list', [SupplierController::class, 'list']);
     Route::get('/create', [SupplierController::class, 'create']);
@@ -92,8 +97,10 @@ Route::group(['prefix' => 'supplier'], function() {
     Route::delete('/{id}/delete_ajax', [SupplierController::class, 'delete_ajax']); 
     Route::delete('/{id}', [SupplierController::class, 'destroy']);
 });
+});
 
 Route::group(['prefix' => 'barang'], function() {
+Route::middleware(['authorize:ADM,MNG,STF'])->group(function() {
     Route::get('/', [BarangController::class, 'index']);
     Route::post('/list', [BarangController::class, 'list']);
     Route::get('/create', [BarangController::class, 'create']);
@@ -109,5 +116,6 @@ Route::group(['prefix' => 'barang'], function() {
     Route::get('/{id}/delete_ajax', [BarangController::class, 'confirm_ajax']);
     Route::delete('/{id}/delete_ajax', [BarangController::class, 'delete_ajax']); 
     Route::delete('/{id}', [BarangController::class, 'destroy']);
+});
 });
 });
