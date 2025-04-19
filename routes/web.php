@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\KategoriController;
 use  App\Http\Controllers\LevelController;
+use App\Http\Controllers\StokController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WelcomeController;
@@ -44,7 +45,7 @@ Route::middleware(['authorize:ADM'])->group(function() {
     Route::post('import_ajax', [UserController::class, 'import_ajax']);
     Route::get('export_excel', [UserController::class, 'export_excel']);
     Route::get('export_pdf', [UserController::class, 'export_pdf']);
-});
+    });
 });
 
 Route::group(['prefix' => 'level'], function() {
@@ -92,7 +93,7 @@ Route::middleware(['authorize:ADM,MNG'])->group(function() {
     Route::post('import_ajax', [KategoriController::class, 'import_ajax']);
     Route::get('export_excel', [KategoriController::class, 'export_excel']);
     Route::get('export_pdf', [KategoriController::class, 'export_pdf']);
-});
+    });
 });
 
 Route::group(['prefix' => 'supplier'], function() {
@@ -116,7 +117,7 @@ Route::group(['prefix' => 'supplier'], function() {
     Route::post('import_ajax', [SupplierController::class, 'import_ajax']);
     Route::get('export_excel', [SupplierController::class, 'export_excel']);
     Route::get('export_pdf', [SupplierController::class, 'export_pdf']);
-});
+    });
 });
 
 Route::group(['prefix' => 'barang'], function() {
@@ -140,6 +141,24 @@ Route::middleware(['authorize:ADM,MNG,STF'])->group(function() {
     Route::post('import_ajax', [BarangController::class, 'import_ajax']);
     Route::get('export_excel', [BarangController::class, 'export_excel']);
     Route::get('export_pdf', [BarangController::class, 'export_pdf']);
+    });
 });
-});
+
+Route::group(['prefix' => 'stok'], function() {
+    Route::middleware(['authorize:ADM,MNG,STF'])->group(function() {
+        Route::get('/', [StokController::class, 'index']);
+        Route::post('/list', [StokController::class, 'list']);
+        Route::get('/create_ajax', [StokController::class, 'create_ajax']);
+        Route::post('/ajax', [StokController::class, 'store_ajax']);
+        Route::get('/{id}/show_ajax', [StokController::class, 'show_ajax']);
+        Route::get('/{id}/edit_ajax', [StokController::class, 'edit_ajax']); 
+        Route::put('/{id}/update_ajax', [StokController::class, 'update_ajax']);
+        Route::get('/{id}/delete_ajax', [StokController::class, 'confirm_ajax']);
+        Route::delete('/{id}/delete_ajax', [StokController::class, 'delete_ajax']);   
+        Route::get('import', [StokController::class, 'import']);
+        Route::post('import_ajax', [StokController::class, 'import_ajax']);
+        Route::get('export_excel', [StokController::class, 'export_excel']);
+        Route::get('export_pdf', [StokController::class, 'export_pdf']);
+        });
+    });
 });
