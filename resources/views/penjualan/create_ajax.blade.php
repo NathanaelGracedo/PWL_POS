@@ -119,7 +119,6 @@
         var items = [];
         var totalAmount = 0;
 
-        // Format number to currency
         function formatRupiah(angka) {
             var number_string = angka.toString().replace(/[^,\d]/g, ''),
             split = number_string.split(','),
@@ -136,14 +135,12 @@
             return 'Rp ' + rupiah;
         }
 
-        // Populate price when barang is selected
         $('#add_barang_id').change(function() {
             var selectedOption = $(this).find('option:selected');
             var harga = selectedOption.data('harga');
             $('#add_harga').val(harga);
         });
 
-        // Add item to list
         $('#btn-add-item').click(function() {
             var barangId = $('#add_barang_id').val();
             var harga = parseInt($('#add_harga').val());
@@ -162,14 +159,11 @@
             var barangNama = selectedOption.data('nama');
             var subtotal = harga * jumlah;
             
-            // Check if item already exists
             var existingItem = items.find(item => item.barang_id == barangId);
             if (existingItem) {
-                // Update existing item
                 existingItem.jumlah += jumlah;
                 existingItem.subtotal = existingItem.harga * existingItem.jumlah;
             } else {
-                // Add new item
                 items.push({
                     barang_id: barangId,
                     nama: barangNama,
@@ -179,23 +173,19 @@
                 });
             }
             
-            // Reset inputs
             $('#add_barang_id').val('');
             $('#add_harga').val('');
             $('#add_jumlah').val(1);
             
-            // Refresh table
             renderTable();
         });
 
-        // Remove item from list
         $(document).on('click', '.btn-remove-item', function() {
             var index = $(this).data('index');
             items.splice(index, 1);
             renderTable();
         });
 
-        // Render table with items
         function renderTable() {
             var tbody = $('#table-items tbody');
             tbody.empty();
@@ -227,10 +217,8 @@
             $('#total-amount').text(formatRupiah(totalAmount));
         }
 
-        // Initialize table
         renderTable();
 
-        // Form validation and submission
         $("#form-tambah").validate({
             rules: {
                 penjualan_kode: {required: true},
@@ -239,7 +227,6 @@
                 penjualan_tanggal: {required: true}
             },
             submitHandler: function(form) {
-                // Check if there are items
                 if (items.length === 0) {
                     Swal.fire({
                         icon: 'error',
@@ -249,10 +236,8 @@
                     return false;
                 }
                 
-                // Prepare data for submission
                 var formData = $(form).serializeArray();
                 
-                // Add items array
                 items.forEach(function(item, index) {
                     formData.push({name: `items[${index}][barang_id]`, value: item.barang_id});
                     formData.push({name: `items[${index}][harga]`, value: item.harga});

@@ -133,7 +133,6 @@
                 dataPenjualan.ajax.reload();
             });
 
-            // untuk Format Rupiah
             function formatRupiah(angka) {
                 var number_string = angka.toString().replace(/[^,\d]/g, ''),
                 split = number_string.split(','),

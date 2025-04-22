@@ -117,7 +117,6 @@ class PenjualanController extends Controller
     
             DB::beginTransaction();
             try {
-                // Simpan header penjualan
                 $penjualan = PenjualanModel::create([
                     'user_id' => $request->user_id,
                     'pembeli' => $request->pembeli,
@@ -231,7 +230,6 @@ public function update_ajax(Request $request, $id)
                 ]);
             }
 
-            // Step 1: Update penjualan header
             $penjualan->update([
                 'user_id' => $request->user_id,
                 'pembeli' => $request->pembeli,
@@ -239,10 +237,9 @@ public function update_ajax(Request $request, $id)
                 'updated_at' => now()
             ]);
 
-            // Step 2: Hapus detail lama
+     
             PenjualanDetailModel::where('penjualan_id', $id)->delete();
 
-            // Step 3: Tambahkan detail baru 
             foreach ($request->items as $item) {
                 PenjualanDetailModel::create([
                     'penjualan_id' => $penjualan->penjualan_id,
@@ -300,10 +297,8 @@ public function delete_ajax(Request $request, $id)
                 ]);
             }
 
-            // Step 1: Delete detail records first
             PenjualanDetailModel::where('penjualan_id', $id)->delete();
             
-            // Step 2: Delete the main penjualan record
             $penjualan->delete();
             
             DB::commit();
@@ -331,7 +326,6 @@ public function delete_ajax(Request $request, $id)
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
-        // Set header row
         $sheet->setCellValue('A1', 'No');
         $sheet->setCellValue('B1', 'Kode Transaksi');
         $sheet->setCellValue('C1', 'Tanggal');
@@ -352,7 +346,6 @@ public function delete_ajax(Request $request, $id)
             $sheet->setCellValue('A' . $baris, $no);
             $sheet->setCellValue('B' . $baris, $data->penjualan_kode);
             
-            // Format datetime
             $excelDateTime = Date::PHPToExcel(new \DateTime($data->penjualan_tanggal));
             $sheet->setCellValue('C' . $baris, $excelDateTime);
             $sheet->getStyle('C' . $baris)->getNumberFormat()->setFormatCode('yyyy-mm-dd hh:mm:ss');

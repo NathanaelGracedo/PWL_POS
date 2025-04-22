@@ -123,13 +123,11 @@
 </form>
 <script>
     $(document).ready(function() {
-        // Recalculate subtotal when quantity or price changes
         $(document).on('input', '.item-qty, .item-price', function() {
             calculateSubtotal($(this).closest('tr'));
             calculateTotal();
         });
         
-        // Add new item row
         $('#btn-add-item').click(function() {
             let rowCount = $('.item-row').length;
             let newRow = `
@@ -165,7 +163,6 @@
             $('#detail-items').append(newRow);
         });
         
-        // Remove item row
         $(document).on('click', '.btn-remove-item', function() {
             if ($('.item-row').length > 1) {
                 $(this).closest('tr').remove();
@@ -180,7 +177,6 @@
             }
         });
         
-        // Set price when barang is selected
         $(document).on('change', '.barang-select', function() {
             let row = $(this).closest('tr');
             let harga = $(this).find('option:selected').data('harga') || 0;
@@ -189,7 +185,6 @@
             calculateTotal();
         });
         
-        // Function to calculate subtotal for a row
         function calculateSubtotal(row) {
             let qty = parseInt(row.find('.item-qty').val()) || 0;
             let price = parseInt(row.find('.item-price').val()) || 0;
@@ -197,7 +192,6 @@
             row.find('.item-subtotal').val(formatNumber(subtotal));
         }
         
-        // Function to calculate total
         function calculateTotal() {
             let total = 0;
             $('.item-row').each(function() {
@@ -208,7 +202,6 @@
             $('#total-amount').text(formatNumber(total));
         }
         
-        // Function to reindex rows after removal
         function reindexRows() {
             $('.item-row').each(function(index) {
                 $(this).find('select[name^="items"]').attr('name', `items[${index}][barang_id]`);
@@ -217,12 +210,10 @@
             });
         }
         
-        // Format number with thousands separator
         function formatNumber(num) {
             return new Intl.NumberFormat('id-ID').format(num);
         }
         
-        // Form validation and submit
         $('#form-edit').validate({
             rules: {
                 pembeli: {required: true, maxlength: 50},
@@ -230,7 +221,6 @@
                 user_id: {required: true, number: true}
             },
             submitHandler: function(form) {
-                // Validate at least one item exists
                 if ($('.item-row').length < 1) {
                     Swal.fire({
                         icon: 'error',
@@ -252,25 +242,19 @@
                                 title: 'Berhasil',
                                 text: response.message
                             });
-                            // Reload DataTable if it exists
                             if (typeof dataPenjualan !== 'undefined') {
                                 dataPenjualan.ajax.reload();
                             }
                         } else {
                             $('.error-text').text('');
                             
-                            // Handle validation errors for main fields
                             $.each(response.msgField, function(field, messages) {
                                 if (field.includes('items.')) {
-                                    // Handle item array validation errors
                                     let parts = field.split('.');
                                     let index = parseInt(parts[1].replace(/\D/g,''));
                                     let itemField = parts[2];
-                                    
-                                    // Display error for specific item field
                                     $(`.item-row:eq(${index})`).find(`.error-${itemField}`).text(messages[0]);
                                 } else {
-                                    // Display error for main fields
                                     $(`#error-${field}`).text(messages[0]);
                                 }
                             });
