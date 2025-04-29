@@ -56,10 +56,6 @@ class PenjualanController extends Controller
             $penjualan->where('user_id', $request->user_id);
         }
 
-        if ($request->start_date && $request->end_date) {
-            $penjualan->whereBetween('penjualan_tanggal', [$request->start_date, $request->end_date]);
-        }
-
         return DataTables::of($penjualan)
             ->addIndexColumn()
             ->addColumn('total_items', function ($penjualan) {
@@ -126,7 +122,6 @@ class PenjualanController extends Controller
                     'updated_at' => now()
                 ]);
     
-                // Simpan detail penjualan tanpa sentuh stok
                 foreach ($request->items as $item) {
                     PenjualanDetailModel::create([
                         'penjualan_id' => $penjualan->penjualan_id,
